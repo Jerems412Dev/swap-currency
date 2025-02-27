@@ -3,6 +3,7 @@ import './App.css'
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Ch, Gb, Jp, Us } from 'react-flags-select';
+import NumberFlow from '@number-flow/react';
 
 function App() {
   const currencies = [
@@ -15,6 +16,8 @@ function App() {
   ]
   const [inputOne, setInputOne] = useState("");
   const [inputTwo, setInputTwo] = useState("");
+  const [focusOne, setFocusOne] = useState(false);
+  const [focusTwo, setFocusTwo] = useState(false);
 
   const handleInputOne = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputOne(event.target.value);
@@ -57,14 +60,24 @@ function App() {
           </div>
           <div className="w-full flex flex-col items-center justify-center rounded-3xl gap-y-1">
             <div className="relative w-full flex flex-row items-center justify-between bg-[#f6f5fa] p-3  rounded-tr-2xl rounded-tl-2xl">
-              <div className="flex flex-row w-[50%] bg-transparent outline-none text-2xl font-[550] text-black items-center justify-start">
+              <div className="relative flex flex-row w-[50%] bg-transparent outline-none text-2xl font-[550] text-black items-center justify-start">
                 <input
                   onChange={handleInputOne}
                   value={inputOne}
                   type="text" 
+                  inputMode="numeric"
                   placeholder="From"
-                  className="w-full bg-transparent outline-none text-[1.5rem] font-[550] text-black" 
+                  onFocus={() => setFocusOne(true)}
+                  onBlur={() => setFocusOne(false)}
+                  className={"absolute z-1 w-full outline-none text-[1.5rem] font-[550]" + (focusOne ? "  text-black" : inputOne === '' ? " bg-[#f6f5fa] placeholder:text-[#8a898f]" : " text-transparent")} 
                 />
+                {!focusOne && 
+                  <NumberFlow 
+                    opacityTiming={{ duration: 50, easing: 'ease-out' }}
+                    locales="en-US"
+                    format={{ style: 'decimal', maximumFractionDigits: 8 }}
+                    value={Number(inputOne)} 
+                    className="absolute z-0 w-full overflow-hidden text-black text-[1.5rem]" />}
               </div>
               <button
                 onClick={() => setShowDropdownOne(!showDropdownOne)}
@@ -123,14 +136,24 @@ function App() {
               </AnimatePresence>
             </div>
             <div className="relative w-full flex flex-row items-center justify-between bg-[#f6f5fa] p-3 rounded-br-2xl rounded-bl-2xl">
-              <div className="flex flex-row w-[50%] bg-transparent outline-none text-2xl font-[550] text-black items-center justify-start">
+              <div className="relative flex flex-row w-[50%] bg-transparent outline-none text-2xl font-[550] text-black items-center justify-start">
                 <input
-                  onChange={handleInputTwo}
-                  value={inputTwo}
-                  type="text" 
-                  placeholder="To"
-                  className="w-full bg-transparent outline-none text-[1.5rem] font-[550] text-black" 
-                />
+                    onChange={handleInputTwo}
+                    value={inputTwo}
+                    type="text" 
+                    inputMode="numeric"
+                    placeholder="To"
+                    onFocus={() => setFocusTwo(true)}
+                    onBlur={() => setFocusTwo(false)}
+                    className={"absolute z-1 w-full outline-none text-[1.5rem] font-[550]" + (focusTwo ? "  text-black" : inputTwo === '' ? " bg-[#f6f5fa] placeholder:text-[#8a898f]" : " text-transparent")} 
+                  />
+                  {!focusTwo && 
+                    <NumberFlow 
+                      opacityTiming={{ duration: 50, easing: 'ease-out' }}
+                      locales="en-US"
+                      format={{ style: 'decimal', maximumFractionDigits: 8 }}
+                      value={Number(inputTwo)} 
+                      className="absolute z-0 w-full overflow-hidden text-black text-[1.5rem]" />}
               </div>
               <button
                 onClick={() => setShowDropdownTwo(!showDropdownTwo)}

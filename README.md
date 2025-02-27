@@ -1,4 +1,4 @@
-# Pricing Widget
+# Swap Currency
 
 It's a simple Swap currency 
 ## Tools
